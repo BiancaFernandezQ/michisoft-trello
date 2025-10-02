@@ -13,6 +13,7 @@
     "@playwright/test": "^1.55.1"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.9.0",
     "dotenv": "^17.2.3",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7"
