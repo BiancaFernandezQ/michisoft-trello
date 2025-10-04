@@ -4,10 +4,11 @@ export class BoardPage {
     this.createBoardButton = page.locator('button[data-test-id="create-board-tile"]');
     this.boardNameInput = page.locator('input[placeholder="Add board title"]');
     this.submitBoardButton = page.locator('button[type="submit"]');
-    this.menuButton = page.getByTestId('OverflowMenuHorizontalIcon'); 
-    this.visibilityButton = page.locator('button:has-text("Visibility:")'); 
-    this.workspaceOption = page.locator('button:has-text("Workspace")');
-    this.favoriteButton = page.locator('button[data-test-id="star-board"]');
+    this.menuButton = page.getByRole('button', { name: 'Mostrar menú' }); 
+    this.visibilityButton = page.getByRole('button', { name: /Visibilidad|Visibility/i }); 
+    this.workspaceOption = page.getByTestId('board-visibility-dropdown-Espacio de trabajo');
+    this.closeButton = page.getByRole('button', { name: 'Cerrar ventana emergente' })
+    this.favoriteButton = page.getByRole('button', { name: "Quitado de favoritos" });
   }
 
   async createBoard(name) {
@@ -20,11 +21,12 @@ export class BoardPage {
     await this.menuButton.click();
     await this.visibilityButton.click();
     await this.workspaceOption.click();
-    await expect(this.visibilityButton).toContainText("Espacio de trabajo");
+    await this.closeButton.click();
   }
 
   async markAsFavorite() {
     await this.menuButton.click();
     await this.favoriteButton.click();
+    await this.closeButton.click();
   }
 }

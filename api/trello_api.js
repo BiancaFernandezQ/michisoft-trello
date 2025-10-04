@@ -18,7 +18,7 @@ export class TrelloAPI {
         params: {
           name,
           defaultLabels: true,
-          defaultLists: true,
+          defaultLists: false,
           keepFromSource: 'none',
           prefs_permissionLevel: prefs.permissionLevel,
           key: API_KEY,

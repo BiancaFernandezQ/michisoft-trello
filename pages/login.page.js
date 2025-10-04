@@ -11,9 +11,12 @@ export class LoginPage {
     await this.page.goto('https://trello.com/login');
   }
 
-  async login(username, password) {
+  async loginuser(username) {
     await this.usernameInput.fill(username);
     await this.continueButton.click();
+  }
+
+  async loginpass(password) {
     await this.passwordInput.fill(password);
     await this.loginButton.click();
   }

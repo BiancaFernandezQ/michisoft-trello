@@ -3,11 +3,9 @@ import { faker } from '@faker-js/faker';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// Carpeta actual del script
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Ruta DB
 const dbPath = path.join(__dirname, '..', 'data', 'boards.db');
 
 const db = new sqlite3.Database(dbPath);
@@ -37,7 +35,6 @@ db.serialize(() => {
   }
 
   stmt.finalize();
-  console.log('Base de datos generada en', dbPath);
 });
 
 db.close();
