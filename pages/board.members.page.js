@@ -7,8 +7,11 @@ class TrelloBoardPage {
     this.inviteInput = 'input[data-testid="add-members-input"]';
     this.sendInviteButton = 'button[data-testid="team-invite-submit-button"]';
     this.roleButtonInMember = name => `div[data-testid="member-item"]:has(span[data-testid="member-list-item-full-name"]:has-text("${name}")) button[data-testid="board-permission-selector-dropdown--trigger"]`;
-    this.roleDropdown = 'button[data-testid="board-permission-selector-dropdown--trigger"]';
     this.roleOption = role => `//span[text()="${role}"]`; // "Administrador", "Miembro", "Observador"
+    
+    this.removeButton = name => `div[data-testid="member-item"]:has(span[data-testid="member-list-item-full-name"]:has-text("${name}")) button span[data-item-title="true"]:has-text("Quitar del tablero")`;
+    this.memberItem = name => `div[data-testid="member-item"]:has(span[data-testid="member-list-item-full-name"]:has-text("${name}")) button[data-testid="board-permission-selector-dropdown--trigger"]`;
+    this.confirmRemoveButton = 'button[data-testid="confirm-remove-deactivated-member-button"]';
   }
 
   async openBoard(url) {
@@ -32,6 +35,23 @@ class TrelloBoardPage {
     await this.page.click(selector);
     await this.page.click(this.roleOption(role));
   }
+
+  async removeMember(email_name) {
+    const memberSelector = this.roleButtonInMember(email_name);
+    await this.page.waitForSelector(memberSelector, { timeout: 15000 });
+    await this.page.click(memberSelector);
+    await this.page.waitForTimeout(1000);
+
+    const removeButton = this.page.locator('text=Quitar del tablero');
+    await removeButton.waitFor({ timeout: 10000 });
+    await removeButton.click();
+
+    const confirmButton = this.page.locator(this.confirmRemoveButton);
+    if (await confirmButton.isVisible()) {
+      await confirmButton.click();
+    }
+  }
+
 }
 
 module.exports = { TrelloBoardPage };

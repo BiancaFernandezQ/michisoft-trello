@@ -19,5 +19,7 @@ test.describe('Automatización Trello - Compartir Tablero', () => {
     await trello.addMember(email);
 
     await trello.changeRole(emailName, 'Observador');
+
+    await trello.removeMember(emailName);
   });
 });
