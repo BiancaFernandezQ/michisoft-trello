@@ -72,4 +72,19 @@ export class ListasPage {
         const cerrarMenu = this.page.locator('button[aria-label="Cerrar ventana emergente"]');
         await cerrarMenu.click();
     }
+
+
+    // asegura que una lista exista antes de crearla JH
+    async ensureListaExiste(nombreLista) {
+        const lista = this.page.locator(`[data-testid="list"] h2:has-text("${nombreLista}")`);
+        if (await lista.count() === 0) {
+            await this.crearLista(nombreLista);
+        }
+    }
+
+    // crea las listas base de prueba sin duplicar JH
+    async prepararListasBase() {
+        await this.ensureListaExiste("Pendiente");
+        await this.ensureListaExiste("En Progreso");
+    }
 }
