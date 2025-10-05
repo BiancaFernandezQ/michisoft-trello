@@ -7,3 +7,6 @@ playwright-report/
 test-results/
 boards.db
 trelloSession.json
+login.json
+boards.db
+listas-varias.db

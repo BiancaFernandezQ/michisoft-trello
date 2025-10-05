@@ -26,7 +26,7 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
     const createResponse = await trello.createBoard(board.name, { permissionLevel: board.permissionLevel, defaultLists: false });
     expect(createResponse.ok()).toBeTruthy();
     const createdBoard = await createResponse.json();
-    console.log('Board creado por API:', createdBoard.name, createdBoard.id, createdBoard.url);
+    console.log('Board creado por API:', createdBoard.name, createdBoard.id, createdBoard.url); //! TODO ARREGALR CARO
 
     await page.goto(createdBoard.url);
 
@@ -67,6 +67,7 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
     const nuevaDescripcion = "Descripción actualizada por API desde el flujo híbrido ✅";  //!TODO NO HARCODEAR DANI
     const updateResponse = await trello.updateCardDescription(cardId, nuevaDescripcion);
     expect(updateResponse.ok()).toBeTruthy();
+    //!cerrar tarjeta JHESS
 
     
     //! share
@@ -92,4 +93,13 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
     // await tarjeta.editarComentario(textoComentario, textoEditado);
 
     // await tarjeta.cerrarTarjeta();
+
+    //!mover tarjeta
+    const LISTA_PENDIENTE = "PendienteJH";
+    const LISTA_EN_PROGRESO = "En ProgresoJH";
+    const listaPendiente = await listasPage.ensureListaExiste(LISTA_PENDIENTE);
+    const listaEnProgreso = await listasPage.ensureListaExiste(LISTA_EN_PROGRESO);
+    const titulo_cardj = `Tarjeta en progreso ${Date.now()}`;
+    await tarjeta.crearTarjeta(listaEnProgreso, titulo_cardj);
+    await tarjeta.moverTarjeta(titulo_cardj, listaPendiente, listaEnProgreso); //!ARREGLAR, crear tarjeta en una lista que se le pasa JESS
 });
