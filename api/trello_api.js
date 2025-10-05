@@ -47,4 +47,28 @@ export class TrelloAPI {
     return response;
   }
 
+  async getCardByName(boardId, nameCard){
+    const response = await this.request.get(
+  `https://api.trello.com/1/boards/${boardId}/cards`,
+  { params: { key: API_KEY, token: TOKEN } }
+  );
+  const cards = await response.json();
+  const cardId = cards.find(c => c.name == nameCard)?.id;
+  return cardId;
+  }
+
+  async updateCardDescription(cardId, newDescription) {
+  const response = await this.request.put(
+    `https://api.trello.com/1/cards/${cardId}`,
+    {
+      params: {
+        key: API_KEY,
+        token: TOKEN,
+        desc: newDescription
+      }
+    }
+  );
+  return response;
+}
+
 }

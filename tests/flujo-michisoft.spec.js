@@ -5,6 +5,7 @@ import { open } from 'sqlite';
 import path from 'path';
 import { faker } from '@faker-js/faker';
 import { ListasPage } from '../pages/listas_page.js';
+import { CardPage } from '../pages/card_page.js';
 
 test.use({ storageState: 'data/trelloSession.json' });
 
@@ -48,9 +49,22 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
     await listasPage2.crearLista(nombreLista2);
 
     await listasPage.moverPrimeraListaAlFinal();
-    await listasPage.cambiarColorDeLista( nombreLista2 , 'color-tile-green'); //!TODO NO HARCODEAR BIANCA
+    await listasPage.cambiarColorDeLista(nombreLista2, 'color-tile-green'); //!TODO NO HARCODEAR BIANCA
 
+
+    //!card
+    const tituloCard = "Primera Tarjera" //!TODO NO HARCODEAR DANI
+    let tarjeta = new CardPage(page);
+    await tarjeta.crearTarjeta(nombreLista, tituloCard);
+    const listaActual = await tarjeta.obtenerListaPorNombre(nombreLista);
+    await expect(listaActual.getByText(tituloCard)).toBeVisible();
+    //await expect(await tarjeta.obtenerTituloTarjetaCreada(nombreLista,tituloCard)).toBeVisible(); //!TODO revisar Dani
+    const cardId = await trello.getCardByName(createdBoard.id, tituloCard);
+    console.log('Card encontrada por API:', tituloCard, cardId);
+
+    const nuevaDescripcion = "Descripción actualizada por API desde el flujo híbrido ✅";  //!TODO NO HARCODEAR DANI
+    const updateResponse = await trello.updateCardDescription(cardId, nuevaDescripcion);
+    expect(updateResponse.ok()).toBeTruthy();
 
     
-
 });
