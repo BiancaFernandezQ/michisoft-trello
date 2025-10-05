@@ -4,7 +4,5 @@ package-lock.json
 storage/
 test-results/
 playwright-report/
-trelloSession.json
 test-results/
 boards.db
-login.json

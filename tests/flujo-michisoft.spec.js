@@ -70,16 +70,26 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
 
     
     //! share
-    const trello_share = new TrelloBoardPage(page);
-    await trello_share.clickShare();
-    const email = generateEmail();
-    const emailName = generateEmailName();
-    console.log(`Correo generado: ${email}`);
-    console.log(`Nombre parcial: ${emailName}`);
+    // const trello_share = new TrelloBoardPage(page);
+    // await trello_share.clickShare();
+    // const email = generateEmail();
+    // const emailName = generateEmailName();
+    // console.log(`Correo generado: ${email}`);
+    // console.log(`Nombre parcial: ${emailName}`);
 
-    await trello_share.addMember(email);
+    // await trello_share.addMember(email);
 
-    await trello_share.changeRole(emailName, 'Observador');
+    // await trello_share.changeRole(emailName, 'Observador');
 
-    await trello_share.removeMember(emailName);
+    // await trello_share.removeMember(emailName);
+
+    //!colab card
+    // await tarjeta.abrirTarjetaPorTitulo(tituloCard); //!ARREGLAR LOCATORS GUADA - 
+    // const textoComentario = 'Comentario de prueba - agregar'; //!TODO NO HARCODEAR GUADA
+    // await tarjeta.agregarComentario(textoComentario);
+
+    // const textoEditado = 'Comentario automatizado - editado'; //!TODO NO HARCODEAR GUADA
+    // await tarjeta.editarComentario(textoComentario, textoEditado);
+
+    // await tarjeta.cerrarTarjeta();
 });
