@@ -1,0 +1,32 @@
+[
+    {
+        "nombre": "PENDIENTE 1",
+        "esperado": "PENDIENTE 1",
+        "valido": true
+    },
+    {
+        "nombre": "PROGRESO 2",
+        "esperado": "PROGRESO 2",
+        "valido": true
+    },
+    {
+        "nombre": "👀 Listas con emoji",
+        "esperado": "👀 Listas con emoji",
+        "valido": true
+    },
+    {
+        "nombre": "12345",
+        "esperado": "12345",
+        "valido": true
+    },
+    {
+        "nombre": "!@#$%",
+        "esperado": "!@#$%",
+        "valido": true
+    },
+    {
+        "nombre": "",
+        "esperado": null,
+        "valido": false
+    }
+]
