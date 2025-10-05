@@ -73,7 +73,7 @@ test.describe("Trello API - Agregar miembro al tablero", () => {
         type: "Miembro"
       }
     });
-    //falta revisar
+    //falta revisar v
     const body = await response.text();
     console.log("Respuesta:", body);
 
