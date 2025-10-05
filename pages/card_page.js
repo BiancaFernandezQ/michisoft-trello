@@ -50,8 +50,7 @@ import { expect } from "@playwright/test";
     // Drag and drop
     await card.dragTo(dropZone);
   }
-    // Archivar la primera tarjeta encontrada en el tablero
-  async archivarPrimeraTarjeta() {
+  /*  async archivarPrimeraTarjeta() {
     const firstCard = this.page.locator('[data-testid="trello-card"]').first();
     await expect(firstCard).toBeVisible();
 
@@ -75,5 +74,5 @@ import { expect } from "@playwright/test";
     // Verifica que ya no esté visible en el tablero (no en el modal)
     const boardCard = this.page.locator('[data-testid="trello-card"]').filter({ hasText: titulo });
     await expect(boardCard).not.toBeVisible({ timeout: 5000 });
-   }
+   } */
   }
