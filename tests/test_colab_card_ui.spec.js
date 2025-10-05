@@ -22,6 +22,11 @@ test.describe('Card UI - comentarios y adjuntos', () => {
 
     const textoComentario = 'Comentario de prueba - agregar';
     await card.agregarComentario(textoComentario);
+
+    const textoEditado = 'Comentario automatizado - editado';
+    await card.editarComentario(textoComentario, textoEditado);
+
+    await card.cerrarTarjeta();
   });
 
   test('Adjuntar archivos (png, pdf, txt) a tarjeta', async ({ page }) => {

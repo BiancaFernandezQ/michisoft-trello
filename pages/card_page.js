@@ -64,6 +64,32 @@ export class CardPage {
       await expect(this.page.locator(`${this.commentItemSelector}:has-text("${textoComentario}")`)).toBeVisible();
    }
 
+   //Editar comentario existente
+   async editarComentario(textoAntiguo, textoNuevo) {
+      
+      const comment = this.page.locator(`${this.commentItemSelector}:has-text("${textoAntiguo}")`).first();
+      await expect(comment).toBeVisible();
+
+      await comment.dblclick();
+      const editTextarea = comment.locator('textarea');
+
+      if (await editTextarea.count() > 0) {
+         await editTextarea.fill(textoNuevo);
+
+         const saveBtn = comment.getByRole('button', { name: 'Guardar' });
+
+         if (await saveBtn.count() > 0) {
+            await saveBtn.click();
+         } 
+
+         await expect(
+            this.page.locator(`${this.commentItemSelector}:has-text("${textoNuevo}")`)
+         ).toBeVisible();
+         return;
+      }
+   }
+
+
    // Adjuntar archivo (ejemplo imagen) en una tarjeta abierta
    async adjuntarArchivo(rutaArchivo, nombreArchivo) {
       const fileInput = this.page.locator(this.fileInputSelector);
@@ -72,8 +98,8 @@ export class CardPage {
    }
 
    // Cerrar tarjeta
-  async cerrarTarjeta() {
-    await this.page.keyboard.press('Escape');
-    await this.page.waitForSelector(`[role="${this.cardDialogRole}"]`, { state: 'detached' });
-  }
+   async cerrarTarjeta() {
+      await this.page.keyboard.press('Escape');
+      await this.page.waitForSelector(`[role="${this.cardDialogRole}"]`, { state: 'detached' });
+   }
 }
