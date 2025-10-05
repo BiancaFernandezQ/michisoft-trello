@@ -1,34 +1,61 @@
 
 import { expect } from "@playwright/test";  
-
 import { ListasPage } from "../pages/listas_page";
 import {CardPage} from "../pages/card_page";
 import {test} from "../fixtures/comb_fixture";
 
 
-
-
 test.use({ storageState: 'storage/trelloSession.json' });
 
 
-test.only("Verificar crear tarjeta en pendiente",async({page})=>{
+test.describe.only("Crear Tarjeta en PENDIENTE",()=>{
+    let listasPage;
+    let tarjeta;
+    const boardUrl = 'https://trello.com/b/8Ebu9DmM/prueba';
+    const nombreLista = `Pendiente`;
+    const tituloCard = "Primera Tarjera"
+
+
+    test.beforeEach(async({page})=>{
+      await page.goto(boardUrl);
+
+      listasPage = new ListasPage(page);
+      await listasPage.crearLista(nombreLista);
+
+      tarjeta = new CardPage(page);
+      await tarjeta.crearTarjeta(nombreLista, tituloCard);
   
-  const boardUrl = 'https://trello.com/b/8Ebu9DmM/prueba';
-  await page.goto(boardUrl);
-  const listasPage = new ListasPage(page);
-  const nombreLista = `Pendiente`;
-  await listasPage.crearLista(nombreLista);
+    });
 
 
-  const tarjeta = new CardPage(page);
-  const tituloCard = "Primera Tarjera"
-  await tarjeta.crearTarjeta(nombreLista , tituloCard);
-  const listaActual = await tarjeta.obtenerListaPorNombre(nombreLista);
+  test("TC01: Verificar que la tarjeta aparezca en la lista",async()=>{
+      const listaActual = await tarjeta.obtenerListaPorNombre(nombreLista);
+      await expect(listaActual.getByText(tituloCard)).toBeVisible();
+      
+  });
 
-  //verificar que la tarjeta aparece en la lista
-  await expect(listaActual.getByText(tituloCard)).toBeVisible({ timeout: 10000 });
- 
+
+  test("TC02: Verificar que el titulo de la tarjeta sea visible ",async()=>{
+    await expect(await tarjeta.obtenerTituloTarjetaCreada(nombreLista,tituloCard)).toBeVisible();
+    
+  });
+
+  test("TC03: Verificar que al seleccionar una tarjeta aparezca un modal para ingresar la descripcion",async()=>{
+      await tarjeta.clickTarjetaCreada(nombreLista,tituloCard)
+     await  expect(await tarjeta.obtenerModalTarjeta(nombreLista,tituloCard)).toBeVisible();
+  });
+
+
+  test("TC04: Validar que una tarjeta seleccionada permita añadir descripcion correctamente",async()=>{
+    
+  });
+
+
 });
+
+
+
+
 
 
 
