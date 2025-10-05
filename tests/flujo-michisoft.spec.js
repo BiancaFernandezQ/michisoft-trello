@@ -6,6 +6,8 @@ import path from 'path';
 import { faker } from '@faker-js/faker';
 import { ListasPage } from '../pages/listas_page.js';
 import { CardPage } from '../pages/card_page.js';
+import { TrelloBoardPage } from '../pages/board.members.page.js';
+import { generateEmail, generateEmailName } from '../utils/generateEmail.js';
 
 test.use({ storageState: 'data/trelloSession.json' });
 
@@ -67,4 +69,17 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
     expect(updateResponse.ok()).toBeTruthy();
 
     
+    //! share
+    const trello_share = new TrelloBoardPage(page);
+    await trello_share.clickShare();
+    const email = generateEmail();
+    const emailName = generateEmailName();
+    console.log(`Correo generado: ${email}`);
+    console.log(`Nombre parcial: ${emailName}`);
+
+    await trello_share.addMember(email);
+
+    await trello_share.changeRole(emailName, 'Observador');
+
+    await trello_share.removeMember(emailName);
 });

@@ -1,5 +1,5 @@
-const { test } = require('@playwright/test');
-const { TrelloBoardPage } = require('../pages/board.members.page');
+import { test, expect } from '@playwright/test';
+import { TrelloBoardPage } from '../pages/board.members.page.js';
 const { generateEmail, generateEmailName } = require('../utils/generateEmail');
 
 test.use({ storageState: 'storage/trelloSession.json' });

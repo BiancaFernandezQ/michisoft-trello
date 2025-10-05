@@ -1,14 +1,13 @@
-const { faker } = require('@faker-js/faker');
-
+import { faker } from '@faker-js/faker';
 let cachedEmail = null; 
 
-function generateEmail(domain = 'gmail.com') {
+export function generateEmail(domain = 'gmail.com') {
   const username = faker.internet.username().replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
   cachedEmail = `${username}@${domain}`;
   return cachedEmail;
 }
 
-function generateEmailName() {
+export function generateEmailName() {
   if (!cachedEmail) {
     throw new Error('No se ha generado un email aún. Llama primero a generateEmail()');
   }
@@ -16,5 +15,5 @@ function generateEmailName() {
   return `@${username}`;
 }
 
-module.exports = { generateEmail, generateEmailName };
+
 

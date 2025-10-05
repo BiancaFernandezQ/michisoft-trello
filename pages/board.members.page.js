@@ -1,6 +1,5 @@
-const { expect } = require('@playwright/test');
-
-class TrelloBoardPage {
+import { expect } from '@playwright/test';
+export class TrelloBoardPage {
   constructor(page) {
     this.page = page;
     this.shareButton = 'button[data-testid="board-share-button"]'; 
@@ -42,7 +41,7 @@ class TrelloBoardPage {
     await this.page.click(memberSelector);
     await this.page.waitForTimeout(1000);
 
-    const removeButton = this.page.locator('text=Quitar del tablero');
+    const removeButton = this.page.locator('text=Quitar del tablero'); //!TODO BOTON NO SE ENCUENTRA MARIA
     await removeButton.waitFor({ timeout: 10000 });
     await removeButton.click();
 
@@ -54,4 +53,3 @@ class TrelloBoardPage {
 
 }
 
-module.exports = { TrelloBoardPage };
