@@ -1,3 +1,9 @@
 node_modules
 package-lock.json
 package.json
+.env
+trelloSession.json
+test-results
+boards.db
+playwright-report
+login.json
