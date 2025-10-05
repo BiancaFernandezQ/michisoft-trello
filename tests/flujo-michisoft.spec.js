@@ -66,10 +66,17 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
 
     const nuevaDescripcion = "Descripción actualizada por API desde el flujo híbrido ✅";  //!TODO NO HARCODEAR DANI
     const updateResponse = await trello.updateCardDescription(cardId, nuevaDescripcion);
-    expect(updateResponse.ok()).toBeTruthy();
-    //!cerrar tarjeta JHESS
+    //expect(updateResponse.ok()).toBeTruthy();
 
-    
+    expect(updateResponse.ok(), "La actualización de la descripción falló").toBeTruthy();
+    const cancelButton = page.locator('[data-testid="list-card-composer-cancel"]');//ya se agrego el boton salir (jhess)
+    if (await cancelButton.count() > 0 && await cancelButton.isVisible()) {
+    await cancelButton.click();
+    console.log("Formulario de tarjeta cerrado correctamente");
+    } else {
+    console.log("No hay formulario activo para cerrar, se continúa con el flujo");
+    }
+        
     //! share
     // const trello_share = new TrelloBoardPage(page);
     // await trello_share.clickShare();
@@ -95,11 +102,11 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
     // await tarjeta.cerrarTarjeta();
 
     //!mover tarjeta
-    const LISTA_PENDIENTE = "PendienteJH";
-    const LISTA_EN_PROGRESO = "En ProgresoJH";
+    const LISTA_PENDIENTE = `Pendiente-${faker.word.noun()}-${Date.now()}`;
+    const LISTA_EN_PROGRESO = `En Progreso-${faker.word.noun()}-${Date.now()}`;
     const listaPendiente = await listasPage.ensureListaExiste(LISTA_PENDIENTE);
     const listaEnProgreso = await listasPage.ensureListaExiste(LISTA_EN_PROGRESO);
-    const titulo_cardj = `Tarjeta en progreso ${Date.now()}`;
+    const titulo_cardj = `Tarjeta en progreso ${faker.word.noun()}-${Date.now()}`;
     await tarjeta.crearTarjeta(listaEnProgreso, titulo_cardj);
-    await tarjeta.moverTarjeta(titulo_cardj, listaPendiente, listaEnProgreso); //!ARREGLAR, crear tarjeta en una lista que se le pasa JESS
+    await tarjeta.moverTarjeta(titulo_cardj, listaPendiente, listaEnProgreso); //!ARREGLADO (JHESS)
 });

@@ -9,7 +9,7 @@ const LISTA_EN_PROGRESO = "En Progreso";
 
 test.use({ storageState: "storage/trelloSession.json" });
 
-test.describe("Movimientos de tarjetas", () => {
+test.describe("Movimientos de tarjetas",  { tag: ['@ui', '@regression'] }, () => {
   let listasPage;
   let cardPage;
 
@@ -29,7 +29,7 @@ test.describe("Movimientos de tarjetas", () => {
     await listasPage.prepararListasBase();
   });
 
-  test("Verificar que existan las listas base", async () => {
+  test("Verificar que existan las listas base @ui @smoke", async () => {
     const listaPendiente = await listasPage.ensureListaExiste(LISTA_PENDIENTE);
     const listaEnProgreso = await listasPage.ensureListaExiste(LISTA_EN_PROGRESO);
 
@@ -37,7 +37,7 @@ test.describe("Movimientos de tarjetas", () => {
     await expect(listaEnProgreso).not.toBeNull();
   });
 
-  test("Crear tarjeta en 'En Progreso' y verificar que existe", async () => {
+  test("Crear tarjeta en 'En Progreso' y verificar que existe @ui @regression", async () => {
     const titulo = `Tarjeta en progreso ${Date.now()}`;
     await cardPage.crearTarjeta(LISTA_EN_PROGRESO, titulo);
 
@@ -45,7 +45,7 @@ test.describe("Movimientos de tarjetas", () => {
     await expect(listaEnProgreso.getByText(titulo)).toBeVisible();
   });
 
-  test("Mover tarjeta de 'Pendiente' a 'En Progreso'", async () => {
+  test("Mover tarjeta de 'Pendiente' a 'En Progreso'@ui @e2e @regression", async () => {
     const titulo = `Tarjeta para mover ${Date.now()}`;
     await cardPage.crearTarjeta(LISTA_PENDIENTE, titulo);
 
@@ -54,8 +54,4 @@ test.describe("Movimientos de tarjetas", () => {
     const listaDestino = await cardPage.obtenerListaPorNombre(LISTA_EN_PROGRESO);
     await expect(listaDestino.getByText(titulo)).toBeVisible();
   });
-
-  /* test(" Archivar la primera tarjeta de Pendiente", async () => { 
-  await cardPage.archivarPrimeraTarjeta(); 
-  }); */
 });
