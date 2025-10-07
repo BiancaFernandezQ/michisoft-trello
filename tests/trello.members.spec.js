@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { TrelloBoardPage } from '../pages/board.members.page.js';
-const { generateEmail, generateEmailName } = require('../utils/generateEmail');
+import { generateEmail, generateEmailName } from '../utils/generateEmail';
 
 test.use({ storageState: 'storage/trelloSession.json' });
 

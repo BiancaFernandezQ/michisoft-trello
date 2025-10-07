@@ -10,6 +10,8 @@ export class ListasPage {
         this.cancelar_button = 'button[aria-label="Cancelar la edición de la lista"]';
         this.listasContainer = '[data-testid="lists"]';
         this.boton_de_lista = 'button._kx6W7TgeWyn4y'; // Btn interno de cada lista
+        this.archivar_lista_button = 'button[data-testid="list-actions-archive-list-button"]';
+        this.mensajeEmerjente = 'div[role="alert"] span:has-text("Lista archivada")';
     }
 
     async crearLista(nombreLista) {
@@ -54,23 +56,33 @@ export class ListasPage {
     }
 
     async cambiarColorDeLista(nombreLista, colorClase) {
-        /**
-         * <button type="button" data-testid="list-edit-menu-button" aria-haspopup="true" aria-label="Más acciones en PROGRESO 2"><span class="nch-icon"><span data-testid="OverflowMenuHorizontalIcon" data-vc="icon-OverflowMenuHorizontalIcon" aria-hidden="true" class="_1trkwc43" style="--icon-primary-color: currentColor; --icon-secondary-color: inherit;"><svg width="24" height="24" role="presentation" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5 14C6.10457 14 7 13.104621 12Z" fill="currentColor"></path></svg></span></span></button>
-         */
-        //buscar o dar click en el boton de la lista aria-label="Más acciones en nombreLista"
         const listas = this.page.locator(this.listasContainer);
         const botonLista = listas.locator(`button[aria-label="Más acciones en ${nombreLista}"]`);
-        //click en el boton
+
         await botonLista.click();
-        /**
-         * <li class="CN2trtwQqgYiNl" data-testid="tile-container"><button class="zzAcsDqvFnUJt7 RZ3Y2QdAWn2KI7 color-blind-pattern-green ybVBgfOiuWZJtD _St8_YSRMkLv07" type="button" data-testid="color-tile-green" aria-label="verde" aria-checked="false" role="radio"></button></li>
-         */
-        //usaremos el data-testid="colorClase" y le daremos click
+
         const colorBoton = this.page.locator(`button[data-testid="${colorClase}"]`);
         await colorBoton.click();
 
         const cerrarMenu = this.page.locator('button[aria-label="Cerrar ventana emergente"]');
         await cerrarMenu.click();
+    }
+
+    async verificarColorDeLista(nombreLista) {
+        const listas = this.page.locator(this.listasContainer);
+        const botonLista = listas.locator(`button[aria-label="Más acciones en ${nombreLista}"]`);
+
+        await botonLista.click();
+    }
+
+    async archivarLista(nombreLista) {
+        const listas = this.page.locator(this.listasContainer);
+        const botonLista = listas.locator(`button[aria-label="Más acciones en ${nombreLista}"]`);
+
+        await botonLista.click();
+
+        const archivarBoton = this.page.locator(this.archivar_lista_button);
+        await archivarBoton.click();
     }
 
 

@@ -42,17 +42,35 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
     expect(updatedBoard.prefs.permissionLevel).toBe('org');
     console.log('Board verificado por API:', updatedBoard.name, updatedBoard.prefs.permissionLevel);
 
+    //!listas
     const listasPage = new ListasPage(page);
-    const nombreLista = `PENDIENTE 1`; //!TODO NO HARCODEAR BIANCA
-    await listasPage.crearLista(nombreLista);
+    const db2 = await open({
+        filename: path.resolve('data', 'listas_varias.db'),
+        driver: sqlite3.Database
+    });
 
-    const listasPage2 = new ListasPage(page);
-    const nombreLista2 = `PROGRESO 2`; //!TODO NO HARCODEAR BIANCA
-    await listasPage2.crearLista(nombreLista2);
+    const listas = await db2.all('SELECT * FROM listas ORDER BY RANDOM() LIMIT 5');
+    await db2.close();
+    const lista = listas[0];
+    const lista2 = listas[1];
+    const lista3 = listas[2];
+
+    const nombreLista = lista.nombre;
+    await listasPage.crearLista(lista.nombre);
+    await listasPage.crearLista(lista2.nombre);
+    await listasPage.crearLista(lista3.nombre);
+
+    expect(await listasPage.existe_en_lista(nombreLista)).toBeTruthy();
 
     await listasPage.moverPrimeraListaAlFinal();
-    await listasPage.cambiarColorDeLista(nombreLista2, 'color-tile-green'); //!TODO NO HARCODEAR BIANCA
 
+    await listasPage.cambiarColorDeLista(nombreLista, lista.color); 
+    await listasPage.cambiarColorDeLista(lista2.nombre, lista2.color);
+    await listasPage.cambiarColorDeLista(lista3.nombre, lista3.color);
+
+    await listasPage.archivarLista(lista3.nombre);
+    const mensaje = page.locator(listasPage.mensajeEmerjente);
+    await expect(mensaje).toBeVisible();
 
     //!card
     const tituloCard = "Primera Tarjera" //!TODO NO HARCODEAR DANI
@@ -95,11 +113,11 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
     // await tarjeta.cerrarTarjeta();
 
     //!mover tarjeta
-    const LISTA_PENDIENTE = "PendienteJH";
-    const LISTA_EN_PROGRESO = "En ProgresoJH";
-    const listaPendiente = await listasPage.ensureListaExiste(LISTA_PENDIENTE);
-    const listaEnProgreso = await listasPage.ensureListaExiste(LISTA_EN_PROGRESO);
-    const titulo_cardj = `Tarjeta en progreso ${Date.now()}`;
-    await tarjeta.crearTarjeta(listaEnProgreso, titulo_cardj);
-    await tarjeta.moverTarjeta(titulo_cardj, listaPendiente, listaEnProgreso); //!ARREGLAR, crear tarjeta en una lista que se le pasa JESS
+    // const LISTA_PENDIENTE = "PendienteJH";
+    // const LISTA_EN_PROGRESO = "En ProgresoJH";
+    // const listaPendiente = await listasPage.ensureListaExiste(LISTA_PENDIENTE);
+    // const listaEnProgreso = await listasPage.ensureListaExiste(LISTA_EN_PROGRESO);
+    // const titulo_cardj = `Tarjeta en progreso ${Date.now()}`;
+    // await tarjeta.crearTarjeta(listaEnProgreso, titulo_cardj);
+    // await tarjeta.moverTarjeta(titulo_cardj, listaPendiente, listaEnProgreso); //!ARREGLAR, crear tarjeta en una lista que se le pasa JESS
 });
