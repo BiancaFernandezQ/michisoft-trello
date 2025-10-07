@@ -37,6 +37,9 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
 
     await page.goto(createdBoard.url);
 
+    //tiempo
+    await page.waitForTimeout(2000);
+    
     await expect(page.locator(`text=${createdBoard.name}`)).toBeVisible();
 
     await boardPage.changeVisibility();
