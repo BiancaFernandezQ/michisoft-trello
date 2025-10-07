@@ -9,9 +9,11 @@ import { CardPage } from '../pages/card_page.js';
 import { TrelloBoardPage } from '../pages/board.members.page.js';
 import { generateEmail, generateEmailName } from '../utils/generateEmail.js';
 
+
+
 test.use({ storageState: 'data/trelloSession.json' });
 
-test('E2E híbrido', async ({ trello, boardPage, page }) => {
+test.only('E2E híbrido', async ({ trello, boardPage, page }) => {
 
     const db = await open({
         filename: path.resolve('data', 'boards.db'),
@@ -54,19 +56,35 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
     await listasPage.cambiarColorDeLista(nombreLista2, 'color-tile-green'); //!TODO NO HARCODEAR BIANCA
 
 
-    //!card
+    //               CARD DANI
     const tituloCard = "Primera Tarjera" //!TODO NO HARCODEAR DANI
     let tarjeta = new CardPage(page);
     await tarjeta.crearTarjeta(nombreLista, tituloCard);
     const listaActual = await tarjeta.obtenerListaPorNombre(nombreLista);
-    await expect(listaActual.getByText(tituloCard)).toBeVisible();
-    //await expect(await tarjeta.obtenerTituloTarjetaCreada(nombreLista,tituloCard)).toBeVisible(); //!TODO revisar Dani
-    const cardId = await trello.getCardByName(createdBoard.id, tituloCard);
-    console.log('Card encontrada por API:', tituloCard, cardId);
 
-    const nuevaDescripcion = "Descripción actualizada por API desde el flujo híbrido ✅";  //!TODO NO HARCODEAR DANI
-    const updateResponse = await trello.updateCardDescription(cardId, nuevaDescripcion);
-    expect(updateResponse.ok()).toBeTruthy();
+    // Verificar tarjeta en Lista
+    await expect(listaActual.getByText(tituloCard)).toBeVisible();
+    console.log('Card creada en UI:', tituloCard);
+
+    // Verificar titulo de tarjeta sea visible
+    await expect(await tarjeta.obtenerTituloTarjetaCreada(nombreLista,tituloCard)).toBeVisible();
+     console.log('Titulo de Tarjeta Creada es visible:', tituloCard);
+
+    // Verificar abrir tarjeta creada correctamente
+     await expect(await tarjeta.abrirTarjetaCreada(nombreLista, tituloCard)).toBeVisible();
+    console.log('Tarjeta abierta correctamente:', tituloCard);
+
+    await tarjeta.cerrarTarjetaModal();
+    console.log('Tarjeta cerrada correctamente:', tituloCard);
+
+    // Verificar agregar descripcion a tarjeta creada
+    const descripcion = "Descripcion de la tarjeta";
+    const descripcionGuardada = await tarjeta.agregarDescripcionATarjeta(nombreLista, tituloCard, descripcion);
+    expect(descripcionGuardada.trim()).toBe(descripcion);
+    console.log('Descripcion agregada a la tarjeta:', descripcionGuardada);
+
+
+   
     //!cerrar tarjeta JHESS
 
     
@@ -95,11 +113,11 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
     // await tarjeta.cerrarTarjeta();
 
     //!mover tarjeta
-    const LISTA_PENDIENTE = "PendienteJH";
-    const LISTA_EN_PROGRESO = "En ProgresoJH";
-    const listaPendiente = await listasPage.ensureListaExiste(LISTA_PENDIENTE);
-    const listaEnProgreso = await listasPage.ensureListaExiste(LISTA_EN_PROGRESO);
-    const titulo_cardj = `Tarjeta en progreso ${Date.now()}`;
-    await tarjeta.crearTarjeta(listaEnProgreso, titulo_cardj);
-    await tarjeta.moverTarjeta(titulo_cardj, listaPendiente, listaEnProgreso); //!ARREGLAR, crear tarjeta en una lista que se le pasa JESS
+    // const LISTA_PENDIENTE = "PendienteJH";
+    // const LISTA_EN_PROGRESO = "En ProgresoJH";
+    // const listaPendiente = await listasPage.ensureListaExiste(LISTA_PENDIENTE);
+    // const listaEnProgreso = await listasPage.ensureListaExiste(LISTA_EN_PROGRESO);
+    // const titulo_cardj = `Tarjeta en progreso ${Date.now()}`;
+    // await tarjeta.crearTarjeta(listaEnProgreso, titulo_cardj);
+    // await tarjeta.moverTarjeta(titulo_cardj, listaPendiente, listaEnProgreso); //!ARREGLAR, crear tarjeta en una lista que se le pasa JESS
 });
