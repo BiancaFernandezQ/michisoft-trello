@@ -4,7 +4,7 @@ import { generateEmail, generateEmailName } from '../utils/generateEmail';
 
 test.use({ storageState: 'storage/trelloSession.json' });
 
-test.describe('Automatización Trello - Compartir Tablero', () => {
+test.describe('Automatización Trello - Compartir Tablero',{tag:'@ui'},{tag:'positivo'}, () => {
   test('Agregar miembro y cambiar rol', async ({ page }) => {
     const trello = new TrelloBoardPage(page);
 
