@@ -3,13 +3,16 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
     testDir: 'tests',
 
-    reporter: 'html',
+
+    reporter: [
+        ['html'], 
+        ['allure-playwright']
+    ],
 
     use: {
-        // Base URL to use in actions like `await page.goto('/')`.
         baseURL: '',
-        headless: true, //headless false para ver la ejecucion en un navegador
-        screenshot: 'only-on-failure', 
+        headless: true, 
+        screenshot: 'only-on-failure',
     },
 
     projects: [
