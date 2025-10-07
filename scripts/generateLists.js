@@ -28,10 +28,10 @@ db.serialize(() => {
 
     const stmt = db.prepare(`INSERT INTO listas (nombre, color) VALUES (?, ?)`);
 
-    for (let i = 0; i < 10; i++) {
-        const nombre = faker.word.words(2); 
+    for (let i = 0; i < 25; i++) {
+        const nombre = faker.word.words(1); 
         //<button type="button" data-testid="color-tile-gray" ></button>
-        const color = faker.helpers.arrayElement(['color-tile-green', 'color-tile-yellow', 'color-tile-orange', 'color-tile-red', 'color-tile-purple', 'color-tile-blue', 'color-tile-teal', 'color-tile-lime', 'color-tile-magenta', 'color-tile-gray']); //data-testid
+        const color = faker.helpers.arrayElement(['color-tile-green', 'color-tile-yellow', 'color-tile-orange', 'color-tile-red', 'color-tile-purple', 'color-tile-blue', 'color-tile-teal', 'color-tile-lime', 'color-tile-magenta']); //data-testid 'color-tile-gray'
         stmt.run(nombre, color);
     }
     stmt.finalize();
