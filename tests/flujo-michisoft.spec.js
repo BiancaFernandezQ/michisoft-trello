@@ -75,7 +75,7 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
     const mensaje = page.locator(listasPage.mensajeEmerjente);
     await expect(mensaje).toBeVisible();
 
-    //               CARD DANI
+    //!               CARD DANI
     const tituloCard = "Primera Tarjera" //!TODO NO HARCODEAR DANI
     let tarjeta = new CardPage(page);
     await tarjeta.crearTarjeta(nombreLista, tituloCard);
@@ -129,21 +129,11 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
     // await tarjeta.cerrarTarjeta();
 
     //!mover tarjeta
-    // const LISTA_PENDIENTE = "PendienteJH";
-    // const LISTA_EN_PROGRESO = "En ProgresoJH";
-    // const listaPendiente = await listasPage.ensureListaExiste(LISTA_PENDIENTE);
-    // const listaEnProgreso = await listasPage.ensureListaExiste(LISTA_EN_PROGRESO);
-    // const titulo_cardj = `Tarjeta en progreso ${Date.now()}`;
-    // await tarjeta.crearTarjeta(listaEnProgreso, titulo_cardj);
-    // await tarjeta.moverTarjeta(titulo_cardj, listaPendiente, listaEnProgreso); //!ARREGLAR, crear tarjeta en una lista que se le pasa JESS
-
-    //!borrar board
-    await boardPage.home();
-    const deletedBoard = await trello.deleteBoard(createdBoard.id);
-    console.log('Tablero eliminado por API:', createdBoard.name);
-
-
-    expect(deletedBoard.ok()).toBeTruthy();
-    const homePage = new HomePage(page);
-    await homePage.logout();
+    const LISTA_PENDIENTE = `Pendiente-${faker.word.noun()}-${Date.now()}`;
+    const LISTA_EN_PROGRESO = `En Progreso-${faker.word.noun()}-${Date.now()}`;
+    const listaPendiente = await listasPage.ensureListaExiste(LISTA_PENDIENTE);
+    const listaEnProgreso = await listasPage.ensureListaExiste(LISTA_EN_PROGRESO);
+    const titulo_cardj = `Tarjeta en progreso ${faker.word.noun()}-${Date.now()}`;
+    await tarjeta.crearTarjeta(listaEnProgreso, titulo_cardj);
+    await tarjeta.moverTarjeta(titulo_cardj, listaPendiente, listaEnProgreso); //!ARREGLADO (JHESS)
 });
