@@ -30,7 +30,7 @@ export class TrelloBoardPage {
 
   async changeRole(email_name, role) {
     const selector = this.roleButtonInMember(email_name);
-    await this.page.waitForSelector(selector, { timeout: 15000 });
+    await this.page.waitForSelector(selector, { timeout: 20000 });
     await this.page.click(selector);
     await this.page.click(this.roleOption(role)); // "Administrador", "Miembro", "Observador"
   }

@@ -129,11 +129,23 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
     // await tarjeta.cerrarTarjeta();
 
     //!mover tarjeta
-    const LISTA_PENDIENTE = `Pendiente-${faker.word.noun()}-${Date.now()}`;
-    const LISTA_EN_PROGRESO = `En Progreso-${faker.word.noun()}-${Date.now()}`;
-    const listaPendiente = await listasPage.ensureListaExiste(LISTA_PENDIENTE);
-    const listaEnProgreso = await listasPage.ensureListaExiste(LISTA_EN_PROGRESO);
+    // const LISTA_PENDIENTE = `Pendiente-${faker.word.noun()}-${Date.now()}`;
+    // const LISTA_EN_PROGRESO = `En Progreso-${faker.word.noun()}-${Date.now()}`;
+    // const listaPendiente = await listasPage.ensureListaExiste(lista);
+    // const listaEnProgreso = await listasPage.ensureListaExiste(lista2);
     const titulo_cardj = `Tarjeta en progreso ${faker.word.noun()}-${Date.now()}`;
-    await tarjeta.crearTarjeta(listaEnProgreso, titulo_cardj);
-    await tarjeta.moverTarjeta(titulo_cardj, listaPendiente, listaEnProgreso); //!ARREGLADO (JHESS)
+    await tarjeta.crearTarjeta(lista.nombre, titulo_cardj);
+    await tarjeta.moverTarjeta(titulo_cardj,lista.nombre, lista2.nombre);
+    
+    //!eliminar board
+    await boardPage.home();
+    //tiempo
+    await page.waitForTimeout(2000);
+    const deletedBoard = await trello.deleteBoard(createdBoard.id);
+    console.log('Tablero eliminado por API:', createdBoard.name);
+
+    //!logout
+    expect(deletedBoard.ok()).toBeTruthy();
+    const homePage = new HomePage(page);
+    await homePage.logout();
 });

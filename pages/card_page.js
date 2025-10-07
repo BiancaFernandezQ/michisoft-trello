@@ -185,7 +185,7 @@ export class CardPage {
 
    async obtenerTituloTarjetaCreada(nombreLista,tituloCard){
       const lista = await this.obtenerListaPorNombre(nombreLista);
-      const tarjetaCreada = lista.locator(this.selectors.listCards, { hasText: tituloCard}).first();
-      return tarjetaCreada.locator(this.selectors.cardName);
+      const tarjetaCreada = lista.locator(this.listCards, { hasText: tituloCard}).first();
+      return tarjetaCreada.locator(this.cardName);
    }
 }
