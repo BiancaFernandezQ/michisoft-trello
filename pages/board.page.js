@@ -9,6 +9,11 @@ export class BoardPage {
     this.workspaceOption = page.getByTestId('board-visibility-dropdown-Espacio de trabajo');
     this.closeButton = page.getByRole('button', { name: 'Cerrar ventana emergente' })
     this.favoriteButton = page.getByRole('button', { name: "Quitado de favoritos" });
+    this.homeLogo = page.getByRole('link', { name: /Volver al inicio|Back to home/i });
+  }
+
+  async home() {
+    await this.homeLogo.click();
   }
 
   async createBoard(name) {

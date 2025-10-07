@@ -30,6 +30,10 @@ export class CardPage {
                this.guardar_boton = '';
 
                }
+    async cerrarPrueba(){
+      this.cerrarPrueba = 'button[aria-label="Cerrar diálogo"]';
+      await this.page.locator(this.cerrarPrueba).click();
+    }
 
     async obtenerListaPorNombre(nombreLista) {
         return this.page.locator(this.list, { hasText: nombreLista }).first();

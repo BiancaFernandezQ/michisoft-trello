@@ -8,12 +8,13 @@ import { ListasPage } from '../pages/listas_page.js';
 import { CardPage } from '../pages/card_page.js';
 import { TrelloBoardPage } from '../pages/board.members.page.js';
 import { generateEmail, generateEmailName } from '../utils/generateEmail.js';
+import { HomePage } from '../pages/home.page.js';
 
 
 
 test.use({ storageState: 'data/trelloSession.json' });
 
-test.only('E2E híbrido', async ({ trello, boardPage, page }) => {
+test('E2E híbrido', async ({ trello, boardPage, page }) => {
 
     const db = await open({
         filename: path.resolve('data', 'boards.db'),
@@ -100,25 +101,22 @@ test.only('E2E híbrido', async ({ trello, boardPage, page }) => {
     const descripcionGuardada = await tarjeta.agregarDescripcionATarjeta(nombreLista, tituloCard, descripcion);
     expect(descripcionGuardada.trim()).toBe(descripcion);
     console.log('Descripcion agregada a la tarjeta:', descripcionGuardada);
-
-
-   
-    //!cerrar tarjeta JHESS
-
     
-    //! share
-    // const trello_share = new TrelloBoardPage(page);
-    // await trello_share.clickShare();
-    // const email = generateEmail();
-    // const emailName = generateEmailName();
-    // console.log(`Correo generado: ${email}`);
-    // console.log(`Nombre parcial: ${emailName}`);
+    await tarjeta.cerrarPrueba();
 
-    // await trello_share.addMember(email);
+    const trello_share = new TrelloBoardPage(page);
+    await trello_share.clickShare();
+    const email = generateEmail();
+    const emailName = generateEmailName();
+    console.log(`Correo generado: ${email}`);
+    console.log(`Nombre parcial: ${emailName}`);
 
-    // await trello_share.changeRole(emailName, 'Observador');
+    await trello_share.addMember(email);
 
-    // await trello_share.removeMember(emailName);
+    await trello_share.changeRole(emailName, 'Observador');
+    // await this.page.locator('[data-testid="board-invite-modal-close-button"]').click();
+
+    await trello_share.removeMember(emailName); 
 
     //!colab card
     // await tarjeta.abrirTarjetaPorTitulo(tituloCard); //!ARREGLAR LOCATORS GUADA - 
@@ -138,4 +136,14 @@ test.only('E2E híbrido', async ({ trello, boardPage, page }) => {
     // const titulo_cardj = `Tarjeta en progreso ${Date.now()}`;
     // await tarjeta.crearTarjeta(listaEnProgreso, titulo_cardj);
     // await tarjeta.moverTarjeta(titulo_cardj, listaPendiente, listaEnProgreso); //!ARREGLAR, crear tarjeta en una lista que se le pasa JESS
+
+    //!borrar board
+    await boardPage.home();
+    const deletedBoard = await trello.deleteBoard(createdBoard.id);
+    console.log('Tablero eliminado por API:', createdBoard.name);
+
+
+    expect(deletedBoard.ok()).toBeTruthy();
+    const homePage = new HomePage(page);
+    await homePage.logout();
 });

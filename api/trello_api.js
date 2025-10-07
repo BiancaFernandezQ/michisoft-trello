@@ -71,4 +71,17 @@ export class TrelloAPI {
   return response;
 }
 
+async deleteBoard(boardId) {
+    const response = await this.request.delete(
+      `https://api.trello.com/1/boards/${boardId}`,
+      {
+        params: {
+          key: API_KEY,
+          token: TOKEN,
+        },
+      }
+    );
+    return response;
+  }
+
 }

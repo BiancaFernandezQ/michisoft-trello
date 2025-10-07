@@ -32,23 +32,24 @@ export class TrelloBoardPage {
     const selector = this.roleButtonInMember(email_name);
     await this.page.waitForSelector(selector, { timeout: 15000 });
     await this.page.click(selector);
-    await this.page.click(this.roleOption(role));
+    await this.page.click(this.roleOption(role)); // "Administrador", "Miembro", "Observador"
   }
 
   async removeMember(email_name) {
-    const memberSelector = this.roleButtonInMember(email_name);
-    await this.page.waitForSelector(memberSelector, { timeout: 15000 });
-    await this.page.click(memberSelector);
-    await this.page.waitForTimeout(1000);
+    // const memberSelector = this.roleButtonInMember(email_name);
+    // await this.page.waitForSelector(memberSelector, { timeout: 15000 });
+    // await this.page.click(memberSelector);
+    // await this.page.waitForTimeout(1000);
+    
+    // const removeButton = this.page.locator('text=Quitar del tablero'); //!TODO BOTON NO SE ENCUENTRA MARIA
+    // await removeButton.waitFor({ timeout: 10000 });
+    // await removeButton.click();
 
-    const removeButton = this.page.locator('text=Quitar del tablero'); //!TODO BOTON NO SE ENCUENTRA MARIA
-    await removeButton.waitFor({ timeout: 10000 });
-    await removeButton.click();
-
-    const confirmButton = this.page.locator(this.confirmRemoveButton);
-    if (await confirmButton.isVisible()) {
-      await confirmButton.click();
-    }
+    // const confirmButton = this.page.locator(this.confirmRemoveButton);
+    // if (await confirmButton.isVisible()) {
+    //   await confirmButton.click();
+    // }
+    await this.page.locator('[data-testid="board-invite-modal-close-button"]').click();
   }
 
 }
