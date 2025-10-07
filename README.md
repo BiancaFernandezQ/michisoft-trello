@@ -41,7 +41,7 @@ Además, se integró la herramienta Allure para la generación de reportes de ej
 ---
 ## 4. Instalacion y Configuracion
 
-### Paso 1: Instalar dependencias
+### Instalar dependencias
 
 - Inicializa un proyecto Node.js con un archivo `package.json` por defecto:<br>
  `npm init -y`
@@ -64,13 +64,7 @@ Además, se integró la herramienta Allure para la generación de reportes de ej
 - Instalar sqlite <br>
 `npm install sqlite`
 
-### Paso 2:  Abrir `.env` con tu editor de texto y completa los valores requeridos:
-   ```bash
-   TRELLO_KEY= cf2715d422430bc7b4a89710dabea636
-TRELLO_TOKEN= ATTAb1a20691f186896d38e132df98ebcca0c31a76d8da1c25251fefefd64b69c25c3E6DE944
-TRELLO_MEMBER_ID= 68d7ef61d8230a7d14f7e284
-TRELLO_USER= michisoft38@gmail.com
- ```
+
 ---
  ## 5. ✅ Ejecucion de pruebas
  >Con todo configurado ya se puede correr pruebas automatizadas de la siguiente manera:
