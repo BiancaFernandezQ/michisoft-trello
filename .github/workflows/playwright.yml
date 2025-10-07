@@ -3,9 +3,9 @@ name: 🎭 Playwright + Trello E2E Hybrid Tests
 
 on:
   push:
-    branches: [ main, staging, dev ]
+    branches: [ main, staging, dev, actions_michi ]
   pull_request:
-    branches: [ main, staging, dev ]
+    branches: [ main, staging, dev, actions_michi ]
 
 jobs:
   test:
