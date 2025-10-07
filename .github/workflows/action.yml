@@ -12,6 +12,10 @@ on:
           - headless
           - headed
 
+  push:
+    branches:
+      - dos
+
 jobs:
   test:
     runs-on: ubuntu-latest
