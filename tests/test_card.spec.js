@@ -2,7 +2,7 @@ import { expect } from "@playwright/test";
 import {test} from "../fixtures/comb_fixture";
 
 
-test.use({ storageState: 'storage/trelloSession.json' });
+test.use({ storageState: 'data/trelloSession.json' });
 
 
 test.describe("Crear Tarjeta en PENDIENTE",{tag:'@ui'},()=>{

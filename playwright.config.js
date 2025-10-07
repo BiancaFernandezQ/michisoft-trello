@@ -4,10 +4,7 @@ export default defineConfig({
     testDir: 'tests',
 
 
-    reporter: [
-        ['html'], 
-        ['allure-playwright']
-    ],
+    reporter: 'html',
 
     use: {
         baseURL: '',

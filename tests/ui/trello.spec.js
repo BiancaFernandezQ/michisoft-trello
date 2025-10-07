@@ -6,9 +6,9 @@ import { test } from '../../fixtures/comb_fixture.js';
 const jsonPath = path.resolve('data', 'login.json');
 const casosInvalidos = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
 
-test.describe('@ui Pruebas de Login en Trello', () => {
+test.describe('Pruebas de Login en Trello', { tag: ['@ui'] } ,() => {
 
-  test('@positive @smoke Login válido y guardar sesión', async ({ loginPage, page }) => {
+  test('@login @positive @smoke Login válido y guardar sesión', async ({ loginPage, page }) => {
     await loginPage.goToLogin();
     await loginPage.loginuser(process.env.TRELLO_USER);
     await loginPage.loginpass(process.env.TRELLO_PASSWORD);

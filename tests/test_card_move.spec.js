@@ -7,7 +7,7 @@ const BOARD_URL = process.env.TRELLO_TEST_BOARD || "https://trello.com/b/MdhBuel
 const LISTA_PENDIENTE = "Pendiente";
 const LISTA_EN_PROGRESO = "En Progreso";
 
-test.use({ storageState: "storage/trelloSession.json" });
+test.use({ storageState: "data/trelloSession.json" });
 
 test.describe("Movimientos de tarjetas",  { tag: ['@ui', '@regression'] }, () => {
   let listasPage;

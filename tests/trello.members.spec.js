@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { TrelloBoardPage } from '../pages/board.members.page.js';
 import { generateEmail, generateEmailName } from '../utils/generateEmail';
 
-test.use({ storageState: 'storage/trelloSession.json' });
+test.use({ storageState: 'data/trelloSession.json' });
 
 test.describe('Automatización Trello - Compartir Tablero', () => {
   test('Agregar miembro y cambiar rol', async ({ page }) => {
