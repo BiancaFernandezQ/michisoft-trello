@@ -1,0 +1,53 @@
+name: Run Playwright Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Selecciona el modo de ejecución de Playwright"
+        required: true
+        default: "headless"
+        type: choice
+        options:
+          - headless
+          - headed
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    env: # ← Aquí inyectamos tus secrets como variables de entorno
+      TRELLO_KEY: ${{ secrets.TRELLO_KEY }}
+      TRELLO_TOKEN: ${{ secrets.TRELLO_TOKEN }}
+      TRELLO_USER: ${{ secrets.TRELLO_USER }}
+      TRELLO_PASSWORD: ${{ secrets.TRELLO_PASSWORD }}
+
+    steps:
+      - name: 📥 Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: 🟢 Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 📦 Instalar dependencias
+        run: |
+          npm ci || npm install
+          npx playwright install
+
+      - name: 🧠 Ejecutar scripts iniciales
+        run: |
+          node ./scripts/generateLists.js
+          node ./scripts/generateBoardsDB.js
+          node ./scripts/login.data.js
+
+      - name: 🧪 Ejecutar pruebas Playwright
+        run: |
+          if [ "${{ github.event.inputs.mode }}" = "headed" ]; then
+            echo "▶️ Ejecutando en modo headed"
+            npx playwright test tests/flujo-michisoft.spec.js --headed
+          else
+            echo "🕵️ Ejecutando en modo headless"
+            npx playwright test tests/flujo-michisoft.spec.js
+          fi
