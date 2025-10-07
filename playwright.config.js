@@ -3,7 +3,7 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
     testDir: 'tests',
 
-
+//allure
     reporter: [
         ['html'], 
         ['allure-playwright']
