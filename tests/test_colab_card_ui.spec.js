@@ -11,7 +11,7 @@ test.describe('Card UI - comentarios y adjuntos', () => {
     await page.goto('https://trello.com/b/0I7SPdDQ/michiiis');  
   });
 
-  test('Añadir y editar comentario en tarjeta', async ({ page }) => {
+  test('Añadir y editar comentario en tarjeta', { tag: ['@ui', '@smoke', '@positive'] }, async ({ page }) => {
     const card = new CardPage(page);
     const lista = 'Lista de prueba';
     const tituloCard = 'Tarjeta de prueba card UI';
@@ -20,16 +20,29 @@ test.describe('Card UI - comentarios y adjuntos', () => {
 
     await card.abrirTarjetaPorTitulo(tituloCard);
 
-    const textoComentario = 'Comentario de prueba - agregar';
+    const textoComentario = `Comentario ${faker.word.noun()} - agregar`;
     await card.agregarComentario(textoComentario);
 
-    const textoEditado = 'Comentario automatizado - editado';
+    const textoEditado = `Comentario ${faker.word.verb()} - editado`;
     await card.editarComentario(textoComentario, textoEditado);
 
     await card.cerrarTarjeta();
   });
 
-  test('Adjuntar archivos (png, pdf, txt) a tarjeta', async ({ page }) => {
+  test('Agregar comentario vacío en tarjeta', { tag: ['@ui', '@negative'] }, async ({ page }) => {
+    const card = new CardPage(page);
+    const lista = 'Lista de prueba';
+    const tituloCard = 'Tarjeta sin comentario';
+
+    await card.crearTarjeta(lista, tituloCard);
+    await card.abrirTarjetaPorTitulo(tituloCard);
+
+    const textoComentario = ''; // caso negativo
+    await card.agregarComentario(textoComentario);
+    });
+
+
+  test('Adjuntar archivos (png, pdf, txt) a tarjeta',{ tag: ['@ui', '@regression'] }, async ({ page }) => {
     const card = new CardPage(page);
     const lista = 'Lista de prueba';
     const tituloCard = 'Tarjeta adjuntos card UI';
