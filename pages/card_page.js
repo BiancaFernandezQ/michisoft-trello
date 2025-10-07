@@ -1,47 +1,108 @@
 
-
 export class CardPage {
-   constructor(page) {
-      this.page = page;
-      this.textarea_card = 'list-card-composer-textarea';
-      this.agregar_card_button = 'list-add-card-button';
-      this.aceptar_agregar_card_button = 'list-card-composer-add-card-button';
+
+         constructor(page) {
+               this.page = page;
+
+               this.textareaCard= 'list-card-composer-textarea',
+               this.agregarCardButton= 'list-add-card-button',
+               this.aceptarAgregarCardButton= 'list-card-composer-add-card-button',
+               this.list= '[data-testid="list"]',
+               this.listCards= '[data-testid="list-cards"]',
+               this.cardName= '[data-testid="card-name"]',
+               this.tarjetaCreada= 'a[data-testid="card-name"][href^="/c/"]',
+
+            // Modal tarjeta
+               this.modalTarjetaCreada= '[data-testid="card-back-name"]',
+
+            // Dentro de Tarjeta :Descripción
+               this.descripcionButton= '[data-testid="description-button"]',
+               this.descripcionInput= 'div[contenteditable="true"][aria-label="Descripción"]',
+               this.descripcionGuardarButton= '[data-testid="description-save-button"]',
+               this.descripcionTexto= '[data-testid="click-wrapper"]'
+               this.cerrarModalTarjetaIcon = '[data-testid="CloseIcon"]',
 
 
-      // Dentro de tarjeta
-      this.descripcion_tarjeta = '';
-      this.commentInput = '[data-testid="comment-input"]';
-      this.commentSave = '[data-testid="comment-save-button"]';
-      this.commentItemSelector = '.current-comment';
-      this.fileInput = 'input[type="file"]';
-      this.attachmentThumbnailSelector = '.attachment-thumbnail';
-      this.guardar_boton = '';
+               this.commentInput = '[data-testid="comment-input"]';
+               this.commentSave = '[data-testid="comment-save-button"]';
+               this.commentItemSelector = '.current-comment';
+               this.fileInput = 'input[type="file"]';
+               this.cardattachmentThumbnailSelector = '.attachment-thumbnail';
+               this.guardar_boton = '';
 
-   }
+               }
 
-   async obtenerListaPorNombre(nombreLista) {
-      return this.page.locator('[data-testid="list"]', { hasText: nombreLista }).first();
-   }
+    async obtenerListaPorNombre(nombreLista) {
+        return this.page.locator(this.list, { hasText: nombreLista }).first();
+    }
+
+    async obtenerTarjetaPorTitulo(listaLocator, tituloCard) {
+        return listaLocator.locator(this.tarjetaCreada, { hasText: tituloCard });
+    }
+
+    async cerrarTarjetaModal(){
+      const cerrarModalButton = this.page.locator(this.cerrarModalTarjetaIcon);
+      await cerrarModalButton.waitFor({ state: 'visible' });
+      await cerrarModalButton.first().click();
+    }
+
+ 
+    async crearTarjeta(nombreLista, tituloCard) {
+        const lista = await this.obtenerListaPorNombre(nombreLista);
+
+        await lista.getByTestId(this.agregarCardButton).click();
+        const textarea = lista.getByTestId(this.textareaCard);
+        await textarea.waitFor({ state: 'visible' });
+        await textarea.fill(tituloCard);
+
+        const agregarBtn = lista.getByTestId(this.aceptarAgregarCardButton);
+        await agregarBtn.waitFor({ state: 'visible' });
+        await agregarBtn.click();
+    }
+
+  
+    async abrirTarjetaCreada(nombreLista, tituloCard) {
+        const lista = await this.obtenerListaPorNombre(nombreLista);
+        const tarjetaCreada = await this.obtenerTarjetaPorTitulo(lista, tituloCard);
+
+        await tarjetaCreada.waitFor({ state: 'visible' });
+        await tarjetaCreada.click();
+
+        const modalTarjeta = this.page.locator(this.modalTarjetaCreada);
+        await modalTarjeta.waitFor({ state: 'visible' });
+        return modalTarjeta;
+    }
+
+    async agregarDescripcionATarjeta(nombreLista, tituloCard, descripcion) {
+        await this.abrirTarjetaCreada(nombreLista, tituloCard);
+
+        const descripcionButton = this.page.locator(this.descripcionButton);
+        await descripcionButton.waitFor({ state: 'visible' });
+        await descripcionButton.click();
+
+        const descripcionInput = this.page.locator(this.descripcionInput);
+        await descripcionInput.waitFor({ state: 'visible' });
+
+        // Borrar contenido existente y escribir nuevo
+        await descripcionInput.click({ clickCount: 3 });
+        await descripcionInput.press('Backspace');
+        await descripcionInput.type(descripcion);
+
+        const guardarButton = this.page.locator(this.descripcionGuardarButton);
+        await guardarButton.waitFor({ state: 'visible' });
+        await guardarButton.click();
+
+        const descripcionGuardada = this.page.locator(this.descripcionTexto);
+        await descripcionGuardada.waitFor({ state: 'visible' });
+        return await descripcionGuardada.textContent();
+    }
 
 
-   async crearTarjeta(nombreLista, tituloCard) {
-      const lista = await this.obtenerListaPorNombre(nombreLista);
-      await lista.getByTestId(this.agregar_card_button).click();
-
-      const textarea = lista.getByTestId(this.textarea_card);
-      await textarea.waitFor({ state: 'visible' });
-      await textarea.fill(tituloCard);
-
-      const agregarBtn = lista.getByTestId(this.aceptar_agregar_card_button);
-      await agregarBtn.waitFor({ state: 'visible' });
-      await agregarBtn.click({ trial: false });
-   }
-
-   async agregarDescripcion(textoDescripcion) {
-      await lista.getByTestId(this.textarea_card).click();
-
-
-   }
+    async obtenerTituloTarjetaCreada(nombreLista, tituloCard) {
+        const lista = await this.obtenerListaPorNombre(nombreLista);
+        const tarjetaCreada = lista.locator(this.listCards, { hasText: tituloCard }).first();
+        return tarjetaCreada.locator(this.cardName);
+    }
 
 
    // Abrir tarjeta por titulo

@@ -71,4 +71,33 @@ export class TrelloAPI {
   return response;
 }
 
+  async addAttachment(cardId, { url, name }) {
+    const response = await this.request.post(
+      `https://api.trello.com/1/cards/${cardId}/attachments`,
+      {
+        params: {
+          url,
+          name,
+          key: API_KEY,
+          token: TOKEN,
+        },
+      }
+    );
+    return response;
+  }
+
+  async addComment(cardId, text) {
+    const response = await this.request.post(
+      `https://api.trello.com/1/cards/${cardId}/actions/comments`,
+      {
+        params: {
+          text,
+          key: API_KEY,
+          token: TOKEN,
+        },
+      }
+    );
+    return response;
+  }
+
 }
