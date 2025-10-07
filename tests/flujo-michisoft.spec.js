@@ -8,12 +8,14 @@ import { ListasPage } from '../pages/listas_page.js';
 import { CardPage } from '../pages/card_page.js';
 import { TrelloBoardPage } from '../pages/board.members.page.js';
 import { generateEmail, generateEmailName } from '../utils/generateEmail.js';
+import { logger } from "../utils/logger.js";
+import { log } from 'console';
 
 
 
 test.use({ storageState: 'data/trelloSession.json' });
-
-test.only('E2E híbrido', async ({ trello, boardPage, page }) => {
+logger.info('Inicializando Ejecucion del Test Cases Flujo ');
+test('E2E híbrido', async ({ trello, boardPage, page }) => {
 
     const db = await open({
         filename: path.resolve('data', 'boards.db'),
@@ -28,7 +30,8 @@ test.only('E2E híbrido', async ({ trello, boardPage, page }) => {
     const createResponse = await trello.createBoard(board.name, { permissionLevel: board.permissionLevel, defaultLists: false });
     expect(createResponse.ok()).toBeTruthy();
     const createdBoard = await createResponse.json();
-    console.log('Board creado por API:', createdBoard.name, createdBoard.id, createdBoard.url); //! TODO ARREGALR CARO
+     logger.info('Board creado por API.....');
+    //console.log('Board creado por API:', createdBoard.name, createdBoard.id, createdBoard.url); //! TODO ARREGALR CARO
 
     await page.goto(createdBoard.url);
 
@@ -42,7 +45,10 @@ test.only('E2E híbrido', async ({ trello, boardPage, page }) => {
     expect(updatedResponse.ok()).toBeTruthy();
     const updatedBoard = await updatedResponse.json();
     expect(updatedBoard.prefs.permissionLevel).toBe('org');
-    console.log('Board verificado por API:', updatedBoard.name, updatedBoard.prefs.permissionLevel);
+
+
+    //console.log('Board verificado por API:', updatedBoard.name, updatedBoard.prefs.permissionLevel);
+    logger.info('Board verificado por API........');
 
     const listasPage = new ListasPage(page);
     const nombreLista = `PENDIENTE 1`; //!TODO NO HARCODEAR BIANCA
@@ -64,24 +70,32 @@ test.only('E2E híbrido', async ({ trello, boardPage, page }) => {
 
     // Verificar tarjeta en Lista
     await expect(listaActual.getByText(tituloCard)).toBeVisible();
-    console.log('Card creada en UI:', tituloCard);
+   // console.log('Card creada en UI:', tituloCard);
+    logger.info('Card creada en UI.......');
+
 
     // Verificar titulo de tarjeta sea visible
     await expect(await tarjeta.obtenerTituloTarjetaCreada(nombreLista,tituloCard)).toBeVisible();
-     console.log('Titulo de Tarjeta Creada es visible:', tituloCard);
+    // console.log('Titulo de Tarjeta Creada es visible:', tituloCard);
+    logger.info('Titulo de Tarjeta Creada es visible.....');
 
     // Verificar abrir tarjeta creada correctamente
      await expect(await tarjeta.abrirTarjetaCreada(nombreLista, tituloCard)).toBeVisible();
-    console.log('Tarjeta abierta correctamente:', tituloCard);
+    //console.log('Tarjeta abierta correctamente:', tituloCard);
+    logger.info('Tarjeta abierta correctamente......');
 
     await tarjeta.cerrarTarjetaModal();
-    console.log('Tarjeta cerrada correctamente:', tituloCard);
+    //console.log('Tarjeta cerrada correctamente:', tituloCard);
+    logger.info('Tarjeta cerrada correctamente......');
 
     // Verificar agregar descripcion a tarjeta creada
     const descripcion = "Descripcion de la tarjeta";
     const descripcionGuardada = await tarjeta.agregarDescripcionATarjeta(nombreLista, tituloCard, descripcion);
     expect(descripcionGuardada.trim()).toBe(descripcion);
-    console.log('Descripcion agregada a la tarjeta:', descripcionGuardada);
+   // console.log('Descripcion agregada a la tarjeta:', descripcionGuardada);
+    logger.info('Descripcion agregada a la tarjeta....');
+
+
 
 
    
