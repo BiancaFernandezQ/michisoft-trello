@@ -1,0 +1,37 @@
+[
+  {
+    "nombre": "Email no registrado",
+    "email": "Laury.Grimes74@yahoo.com",
+    "password": "uRCh3y8DAninRyJ"
+  },
+  {
+    "nombre": "Campo email vacío",
+    "email": "",
+    "password": "KB1_vfUrWKpBAvG"
+  },
+  {
+    "nombre": "Email sin arroba",
+    "email": "Gerda31yahoo.com",
+    "password": "6fX2UnEwrhZR_7t"
+  },
+  {
+    "nombre": "Email no válido",
+    "email": "AssuntaRussel28@hotmail.com",
+    "password": "qriRGZ5uLPCai7i"
+  },
+  {
+    "nombre": "Contraseña muy corta",
+    "email": "michisoft38@gmail.com",
+    "password": "yCm"
+  },
+  {
+    "nombre": "Contraseña no válida",
+    "email": "michisoft38@gmail.com",
+    "password": "            "
+  },
+  {
+    "nombre": "Campo contraseña vacío",
+    "email": "michisoft38@gmail.com",
+    "password": ""
+  }
+]
