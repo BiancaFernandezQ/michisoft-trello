@@ -8,11 +8,14 @@ import { ListasPage } from '../pages/listas_page.js';
 import { CardPage } from '../pages/card_page.js';
 import { TrelloBoardPage } from '../pages/board.members.page.js';
 import { generateEmail, generateEmailName } from '../utils/generateEmail.js';
+import { logger } from "../utils/logger.js";
+import { log } from 'console';
 import { HomePage } from '../pages/home.page.js';
 
 
 
 test.use({ storageState: 'data/trelloSession.json' });
+logger.info('Inicializando Ejecucion del Test Cases Flujo ');
 
 test('E2E híbrido', async ({ trello, boardPage, page }) => {
 
@@ -29,7 +32,8 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
     const createResponse = await trello.createBoard(board.name, { permissionLevel: board.permissionLevel, defaultLists: false });
     expect(createResponse.ok()).toBeTruthy();
     const createdBoard = await createResponse.json();
-    console.log('Board creado por API:', createdBoard.name, createdBoard.id, createdBoard.url); //! TODO ARREGALR CARO
+     logger.info('Board creado por API.....');
+    //console.log('Board creado por API:', createdBoard.name, createdBoard.id, createdBoard.url); //! TODO ARREGALR CARO
 
     await page.goto(createdBoard.url);
 
@@ -43,7 +47,10 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
     expect(updatedResponse.ok()).toBeTruthy();
     const updatedBoard = await updatedResponse.json();
     expect(updatedBoard.prefs.permissionLevel).toBe('org');
-    console.log('Board verificado por API:', updatedBoard.name, updatedBoard.prefs.permissionLevel);
+
+
+    //console.log('Board verificado por API:', updatedBoard.name, updatedBoard.prefs.permissionLevel);
+    logger.info('Board verificado por API........');
 
     //!listas
     const listasPage = new ListasPage(page);
@@ -59,19 +66,23 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
     const lista3 = listas[2];
 
     const nombreLista = lista.nombre;
+    logger.info('Creando Lista........');
     await listasPage.crearLista(lista.nombre);
     await listasPage.crearLista(lista2.nombre);
     await listasPage.crearLista(lista3.nombre);
-
+    logger.info('lista creada........');
     expect(await listasPage.existe_en_lista(nombreLista)).toBeTruthy();
 
     await listasPage.moverPrimeraListaAlFinal();
+    logger.info('Lista cambiuo de posicion........');
 
     await listasPage.cambiarColorDeLista(nombreLista, lista.color); 
     await listasPage.cambiarColorDeLista(lista2.nombre, lista2.color);
     await listasPage.cambiarColorDeLista(lista3.nombre, lista3.color);
+    logger.info('Lista cambiada de color........');
 
     await listasPage.archivarLista(lista3.nombre);
+    logger.info('Lista archivada........');
     const mensaje = page.locator(listasPage.mensajeEmerjente);
     await expect(mensaje).toBeVisible();
 
@@ -83,24 +94,30 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
 
     // Verificar tarjeta en Lista
     await expect(listaActual.getByText(tituloCard)).toBeVisible();
-    console.log('Card creada en UI:', tituloCard);
+   // console.log('Card creada en UI:', tituloCard);
+    logger.info('Card creada en UI.......');
+
 
     // Verificar titulo de tarjeta sea visible
     await expect(await tarjeta.obtenerTituloTarjetaCreada(nombreLista,tituloCard)).toBeVisible();
-     console.log('Titulo de Tarjeta Creada es visible:', tituloCard);
+    // console.log('Titulo de Tarjeta Creada es visible:', tituloCard);
+    logger.info('Titulo de Tarjeta Creada es visible.....');
 
     // Verificar abrir tarjeta creada correctamente
      await expect(await tarjeta.abrirTarjetaCreada(nombreLista, tituloCard)).toBeVisible();
-    console.log('Tarjeta abierta correctamente:', tituloCard);
+    //console.log('Tarjeta abierta correctamente:', tituloCard);
+    logger.info('Tarjeta abierta correctamente......');
 
     await tarjeta.cerrarTarjetaModal();
-    console.log('Tarjeta cerrada correctamente:', tituloCard);
+    //console.log('Tarjeta cerrada correctamente:', tituloCard);
+    logger.info('Tarjeta cerrada correctamente......');
 
     // Verificar agregar descripcion a tarjeta creada
     const descripcion = "Descripcion de la tarjeta";
     const descripcionGuardada = await tarjeta.agregarDescripcionATarjeta(nombreLista, tituloCard, descripcion);
     expect(descripcionGuardada.trim()).toBe(descripcion);
     console.log('Descripcion agregada a la tarjeta:', descripcionGuardada);
+    logger.info('Descripcion agregada a la tarjeta........');
     
     await tarjeta.cerrarPrueba();
 
@@ -110,13 +127,33 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
     const emailName = generateEmailName();
     console.log(`Correo generado: ${email}`);
     console.log(`Nombre parcial: ${emailName}`);
+   // console.log('Descripcion agregada a la tarjeta:', descripcionGuardada);
+    logger.info('Descripcion agregada a la tarjeta....');
+
+
+
+
+   
+    //!cerrar tarjeta JHESS
+
+    
+    //! share
+    // const trello_share = new TrelloBoardPage(page);
+    // await trello_share.clickShare();
+    // const email = generateEmail();
+    // const emailName = generateEmailName();
+    // console.log(`Correo generado: ${email}`);
+    // console.log(`Nombre parcial: ${emailName}`);
 
     await trello_share.addMember(email);
+    logger.info('Miembro añadido ........');
 
     await trello_share.changeRole(emailName, 'Observador');
     // await this.page.locator('[data-testid="board-invite-modal-close-button"]').click();
+    logger.info('Modificar Rol........');
 
     await trello_share.removeMember(emailName); 
+    logger.info('Eliminar Miembro........');
 
     //!colab card
     // await tarjeta.abrirTarjetaPorTitulo(tituloCard); //!ARREGLAR LOCATORS GUADA - 
@@ -135,7 +172,9 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
     // const listaEnProgreso = await listasPage.ensureListaExiste(lista2);
     const titulo_cardj = `Tarjeta en progreso ${faker.word.noun()}-${Date.now()}`;
     await tarjeta.crearTarjeta(lista.nombre, titulo_cardj);
+    logger.info('Crear tarjeta........');
     await tarjeta.moverTarjeta(titulo_cardj,lista.nombre, lista2.nombre);
+    logger.info('Mover tarjeta........');
     
     //!eliminar board
     await boardPage.home();
@@ -143,9 +182,11 @@ test('E2E híbrido', async ({ trello, boardPage, page }) => {
     await page.waitForTimeout(2000);
     const deletedBoard = await trello.deleteBoard(createdBoard.id);
     console.log('Tablero eliminado por API:', createdBoard.name);
+    logger.info('Eliminar Tablero........');
 
     //!logout
     expect(deletedBoard.ok()).toBeTruthy();
     const homePage = new HomePage(page);
     await homePage.logout();
+    logger.info('Logout........');
 });
