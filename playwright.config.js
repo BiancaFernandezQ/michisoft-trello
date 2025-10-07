@@ -8,7 +8,7 @@ export default defineConfig({
     use: {
         // Base URL to use in actions like `await page.goto('/')`.
         baseURL: '',
-        headless: false, //headless false para ver la ejecucion en un navegador
+        headless: true, //headless false para ver la ejecucion en un navegador
         screenshot: 'only-on-failure', 
     },
 
