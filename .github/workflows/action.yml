@@ -1,4 +1,4 @@
-name: Run Playwright Tests
+name: Run Playwright TeststB
 
 on:
   workflow_dispatch:
