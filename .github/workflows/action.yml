@@ -45,6 +45,7 @@ jobs:
           node ./scripts/generateLists.js
           node ./scripts/generateBoardsDB.js
           node ./scripts/login.data.js
+          npx playwright test tests/ui/trello.spec.js   
 
       - name: 🧪 Ejecutar pruebas Playwright
         run: |
